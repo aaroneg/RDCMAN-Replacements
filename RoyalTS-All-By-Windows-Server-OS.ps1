@@ -11,10 +11,11 @@ $OperatingSystems = ($Servers | Select-Object OperatingSystem -Unique).Operating
 
 ForEach ($OS in $OperatingSystems)  {
     $folder= New-RoyalObject -Type RoyalFolder -Folder $RoyalDocument -Name $OS -Description "All $OS servers"
+    $folder.CredentialFromParent = $true
     $FolderItems= $Servers| Where-Object OperatingSystem -EQ $OS
     Foreach ($Item in $FolderItems) {
-        $RDS = New-RoyalObject -Type RoyalRDSConnection -Folder $folder -Name "$($Item.Name)"# -URI "$($Item.DNSHostname)"
-        $RDS.URI = $Item.DNSHostname
+        $RDS = New-RoyalObject -Type RoyalRDSConnection -Folder $folder -Name "$($Item.Name)"
+        $RDS.URI = $Item.DNSHostName
         $RDS.CredentialFromParent =  $true
     }
 }
